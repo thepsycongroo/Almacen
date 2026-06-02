@@ -23,7 +23,6 @@ public class SucursalServiceImpl implements SucursalService {
     private final SucursalMapper sucursalMapper;
 
 
-
     @Override
     @Transactional(readOnly = true)
     public List<SucursalResponse> listar() {
