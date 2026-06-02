@@ -1,4 +1,13 @@
 package com.almacen.almacen.dto.producto;
 
-public record ProductoResponse() {
+import java.math.BigDecimal;
+
+public record ProductoResponse(
+        Long id,
+        String nombre,
+        String categoria,
+        BigDecimal precio,
+        Integer cantidad
+        ) {
+
 }
