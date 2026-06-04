@@ -4,17 +4,25 @@ import com.almacen.almacen.dto.producto.ProductoRequest;
 import com.almacen.almacen.dto.producto.ProductoResponse;
 import com.almacen.almacen.dto.sucursales.SucursalRequest;
 import com.almacen.almacen.dto.sucursales.SucursalResponse;
+import com.almacen.almacen.entity.DetalleVenta;
 import com.almacen.almacen.entity.Producto;
 import com.almacen.almacen.enums.Categoria;
+import com.almacen.almacen.enums.EstadoVenta;
+import com.almacen.almacen.especifications.ProductoSpecifications;
 import com.almacen.almacen.exceptions.RecursoNoEncontradoException;
 import com.almacen.almacen.mappers.ProductoMapper;
+import com.almacen.almacen.repository.DetalleVentasRepository;
 import com.almacen.almacen.repository.ProductoRepository;
+import com.almacen.almacen.repository.VentaRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @AllArgsConstructor
@@ -25,12 +33,17 @@ public class ProductoServiceImpl implements ProductoService {
 
     private final ProductoRepository productoRepository;
     private final ProductoMapper productoMapper;
+    private final DetalleVentasRepository detalleVentasRepository;
 
     @Override
     @Transactional(readOnly = true)
-    public List<ProductoResponse> listar() {
+    public List<ProductoResponse> listar(String nombre, String categoria, BigDecimal precioMin, BigDecimal  precioMax) {
         log.info("Se estan listando los productos");
-        return productoRepository.findAll().stream().map(entidad->productoMapper.entidadResponse(entidad)).toList();
+        return productoRepository.findAll(ProductoSpecifications.productosPorNombre(nombre)
+                .and(ProductoSpecifications.productosPorCategoria(categoria))
+                .and(ProductoSpecifications.productosPorPrecioMin(precioMin))
+                .and(ProductoSpecifications.productosPorPrecioMax(precioMax))
+        ).stream().map(entidad->productoMapper.entidadResponse(entidad)).toList();
     //return productoRepository.findAll().stream().map(productoMapper::entidadResponse).toList();
     }
 
@@ -63,6 +76,8 @@ public class ProductoServiceImpl implements ProductoService {
     public void eliminar(Long id) {
         Producto producto = obtenerPorIdOException(id);
         log.info("Eliminando producto con id {}",id);
+        if (detalleVentasRepository.existsByProducto_IdAndVentas_Estado(id, EstadoVenta.REGISTRADA))
+            throw new IllegalStateException("Existe almenos 1 venta registrada");
         productoRepository.delete(producto);
         log.info("Producto con id {} eliminado",id);
     }

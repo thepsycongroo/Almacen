@@ -6,12 +6,15 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Getter @Setter
+@ToString
 @Table(name = "PRODUCTOS")
 public class Producto {
     @Id
@@ -28,6 +31,9 @@ public class Producto {
     private BigDecimal precio;
     @Column(name = "CANTIDAD", nullable = false)
     private Integer cantidad;
+
+    @OneToMany(mappedBy = "producto",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<DetalleVenta> detalleVentas= new ArrayList<>();
 
     public void actualizar(String nombre, Categoria categoria, BigDecimal precio, Integer cantidad) {
         validartamanio(nombre,categoria,precio,cantidad);
