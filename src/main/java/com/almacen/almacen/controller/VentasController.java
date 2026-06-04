@@ -5,6 +5,8 @@ import com.almacen.almacen.dto.ventas.VentaRequest;
 import com.almacen.almacen.dto.ventas.VentaResponse;
 import com.almacen.almacen.entity.Ventas;
 import com.almacen.almacen.services.VentaService;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,18 +34,18 @@ public class VentasController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<VentaResponse> obtenerVentaPorId(@PathVariable Long id){
+    public ResponseEntity<VentaResponse> obtenerVentaPorId(@PathVariable @Positive(message = "El id debe ser positivo") Long id){
         return ResponseEntity.ok(ventaService.obtenerPorId(id));
     }
 
     @PostMapping
-    public  ResponseEntity<VentaResponse> registrar(@RequestBody VentaRequest request){
+    public  ResponseEntity<VentaResponse> registrar(@Valid @RequestBody VentaRequest request){
         return  ResponseEntity.status(HttpStatus.CREATED).body(ventaService.registrar(request));
 
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<VentaResponse> eliminarVenta(@PathVariable Long id){
+    public ResponseEntity<VentaResponse> eliminarVenta(@Valid  @PathVariable @Positive(message = "El id debe ser positivo") Long id){
         ventaService.cancelar(id);
         return ResponseEntity.noContent().build();
     }

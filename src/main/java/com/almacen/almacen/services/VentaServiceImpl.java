@@ -75,11 +75,11 @@ public class VentaServiceImpl implements VentaService{
     public void cancelar(Long id) {
         Ventas ventas = obtenerPorIdOException(id);
         log.info("Eliminando venta con id: {}",id);
-        ventas.setEstado(EstadoVenta.CANCELADA);
         for (DetalleVenta ventasDetalles : ventas.getDetalleVenta()){
             Producto producto = ventasDetalles.getProducto();
             producto.aumentarCantidad(ventasDetalles.getCantidad_producto());
         }
+        ventas.setEstado(EstadoVenta.CANCELADA);
         ventaRepository.save(ventas);
         log.info("Se ha eliminando la venta con id: {}",id);
     }

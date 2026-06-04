@@ -25,7 +25,7 @@ public class DetalleVenta {
     @JoinColumn(name = "ID_PRODUCTO",nullable = false)
     private Producto producto;
 
-    @Column(name = "CANTIDAD_PRODUCTO",nullable = false)
+    @Column( name = "CANTIDAD_PRODUCTO",nullable = false)
     private Integer cantidad_producto;
 
     @Column(name = "PRECIO_PRODUCTO", nullable = false)
