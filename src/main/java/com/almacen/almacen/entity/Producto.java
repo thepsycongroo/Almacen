@@ -61,7 +61,7 @@ public class Producto {
         StringCustomUtils.validarTamanio(nombre,5,30,"El nombre es requerido y debe tener 5 y 30 caracteres");
 
         if (cantidad ==null)
-            throw new IllegalArgumentException("La categoria es requerida");
+            throw new IllegalArgumentException("La cantidad es requerida");
         if (precio==null || precio.compareTo(BigDecimal.ZERO) <0)
             throw new IllegalArgumentException("El precio es requerido y debe ser positivo");
         if (cantidad == null || cantidad < 0)

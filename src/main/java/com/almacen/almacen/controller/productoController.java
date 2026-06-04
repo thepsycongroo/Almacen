@@ -41,7 +41,7 @@ public class productoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProductoResponse> actualizar(@RequestBody ProductoRequest request, @PathVariable @Positive(message = "El id debe ser ositivo") Long id){
+    public ResponseEntity<ProductoResponse> actualizar(@Valid @RequestBody ProductoRequest request, @PathVariable @Positive(message = "El id debe ser ositivo") Long id){
         return ResponseEntity.ok(productoService.actualizar(request,id));
     }
 

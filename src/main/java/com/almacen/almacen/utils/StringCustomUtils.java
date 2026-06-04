@@ -13,7 +13,7 @@ public class StringCustomUtils {
         if (texto==null || texto.isBlank())
             throw new IllegalArgumentException(mensaje);
         // se puede reemplazar con validarNoVacio(texto,mensaje)
-        if (texto.length() < min && texto.length() > max)
+        if (texto.length() < min || texto.length() > max)
             throw new IllegalArgumentException(mensaje);
     }
 

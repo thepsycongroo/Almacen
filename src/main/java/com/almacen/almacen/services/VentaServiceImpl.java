@@ -35,8 +35,13 @@ public class VentaServiceImpl implements VentaService{
     @Transactional(readOnly = true)
     public List<VentaResponse> listar() {
         log.info("Listando todas las ventas");
+        return ventaRepository.findByEstado(EstadoVenta.REGISTRADA)
+                .stream()
+                .map(ventasMapper::entidadResponse)
+                .toList();
+        /*
         return ventaRepository.findAll().stream().map(entidad-> ventasMapper.entidadResponse(entidad))
-                .filter(n->n.estado().equalsIgnoreCase(EstadoVenta.REGISTRADA.toString())).toList();
+                .filter(n->n.estado().equalsIgnoreCase(EstadoVenta.REGISTRADA.toString())).toList();*/
     }
     @Override
     @Transactional(readOnly = true)
