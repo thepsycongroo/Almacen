@@ -5,6 +5,9 @@ import com.almacen.almacen.utils.StringCustomUtils;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -23,6 +26,8 @@ public class Sucursal {
     @Column(name="DIRECCION", length = 150, nullable = false)
     private String direccion;
 
+    @OneToMany(mappedBy = "sucursal",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Ventas> ventas= new ArrayList<>();
 
     public void actualizar(String nombre, String direccion){
         // se puede dejar solo StringCustomUtils.validarTamanio(nombre,5,50,"mensaje")

@@ -4,6 +4,7 @@ import com.almacen.almacen.dto.sucursales.SucursalRequest;
 import com.almacen.almacen.dto.sucursales.SucursalResponse;
 import com.almacen.almacen.entity.Sucursal;
 import com.almacen.almacen.services.SucursalService;
+import com.almacen.almacen.services.VentaService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;

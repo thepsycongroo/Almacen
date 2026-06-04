@@ -3,9 +3,12 @@ package com.almacen.almacen.services;
 import com.almacen.almacen.dto.sucursales.SucursalRequest;
 import com.almacen.almacen.dto.sucursales.SucursalResponse;
 import com.almacen.almacen.entity.Sucursal;
+import com.almacen.almacen.enums.EstadoVenta;
 import com.almacen.almacen.exceptions.RecursoNoEncontradoException;
 import com.almacen.almacen.mappers.SucursalMapper;
+import com.almacen.almacen.repository.DetalleVentasRepository;
 import com.almacen.almacen.repository.SucursalRepository;
+import com.almacen.almacen.repository.VentaRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,7 +24,7 @@ public class SucursalServiceImpl implements SucursalService {
 
     private final SucursalRepository sucursalRepository;
     private final SucursalMapper sucursalMapper;
-
+    private final VentaRepository ventaRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -60,6 +63,8 @@ public class SucursalServiceImpl implements SucursalService {
     public void eliminar(Long id) {
         Sucursal sucursal = obtenerSucursalOException(id);
         log.info("Eliminando Sucursal con id {}",id);
+        if (ventaRepository.existsBySucursal_IdAndEstado(id, EstadoVenta.REGISTRADA))
+            throw new IllegalStateException("Existe almenos 1 venta registrada");
         sucursalRepository.delete(sucursal);
         log.info("Sucursal con id {} eliminada",id);
     }
